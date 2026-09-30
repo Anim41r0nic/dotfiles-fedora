@@ -67,9 +67,9 @@ g $B.applications blur false
 g $B.dash-to-dock blur false
 
 # --- Apps favoritas en el dock -------------------------------------------------
-g org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'com.brave.Browser.desktop', 'org.gnome.Ptyxis.desktop', 'com.microsoft.VSCode.desktop', 'pycharm-community.desktop', 'codeblocks.desktop', 'org.gnome.TextEditor.desktop', 'org.gnome.Settings.desktop']"
+g org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Ptyxis.desktop', 'com.microsoft.VSCode.desktop', 'pycharm-community.desktop', 'codeblocks.desktop', 'org.gnome.Settings.desktop']"
 
-# --- Brave como navegador por defecto ------------------------------------------
-xdg-settings set default-web-browser com.brave.Browser.desktop
+# --- Firefox como navegador por defecto ------------------------------------------
+xdg-settings set default-web-browser org.mozilla.firefox.desktop
 
 echo "GNOME configurado."

@@ -1,7 +1,7 @@
 #!/bin/bash
-# FASE 5 — Desarrollo: C/C++, Python, bases de datos, contenedores, Java, IDEs, Brave
+# FASE 5 — Desarrollo: C/C++, Python, bases de datos, contenedores, Java, IDEs (Firefox viene con Fedora)
 # Ejecutar con: sudo bash ~/dotfiles/scripts/setup/fase-5.sh
-# Solo instala paquetes de repos oficiales (Fedora, Microsoft, Brave y el COPR de
+# Solo instala paquetes de repos oficiales (Fedora, Microsoft y el COPR de
 # PyCharm incluido en fedora-workstation-repositories). No borra datos.
 set -euo pipefail
 
@@ -22,10 +22,6 @@ gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 EOF
 
-step "Repositorio oficial de Brave"
-dnf config-manager addrepo --overwrite --from-repofile=https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
-rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-
 step "Instalando paquetes (dnf creará snapshots pre/post)"
 PKGS=(
     # C/C++
@@ -38,8 +34,8 @@ PKGS=(
     podman-compose podman-docker
     # Java LTS disponible en Fedora 44
     java-25-openjdk-devel
-    # IDEs, navegador y utilidades
-    code pycharm-community brave-browser gh
+    # IDEs y utilidades
+    code pycharm-community gh
     lm_sensors fzf
 )
 dnf install -y "${PKGS[@]}"

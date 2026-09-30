@@ -24,7 +24,7 @@ git clone <url-de-tu-repo> ~/dotfiles
 # 2. Paquetes y configuración de sistema (revisa cada script antes; piden sudo)
 sudo bash ~/dotfiles/scripts/setup/fase-3.sh     # snapper + hook dnf + actualización
 sudo bash ~/dotfiles/scripts/setup/fase-4.sh     # firewall + fwupd
-sudo bash ~/dotfiles/scripts/setup/fase-5.sh     # desarrollo, IDEs, Brave, PostgreSQL
+sudo bash ~/dotfiles/scripts/setup/fase-5.sh     # desarrollo, IDEs, PostgreSQL
 sudo bash ~/dotfiles/scripts/setup/fase-6-8.sh   # extensiones, zram zstd, libvirt
 # (reiniciar)
 
