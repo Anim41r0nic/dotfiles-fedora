@@ -1,0 +1,26 @@
+#!/bin/bash
+# Hook para el plugin "actions" de dnf5: crea un par de snapshots pre/post
+# de Snapper (config "root") en cada transacción de dnf.
+# Instalado en /usr/local/sbin/dnf-snapper-hook por fase-3.sh.
+#
+# dnf5 lee la salida estándar: "tmp.snapper_pre=N" guarda el número del
+# snapshot "pre" para usarlo en el "post". Nunca debe bloquear dnf: si
+# snapper falla, solo se registra un aviso.
+
+case "$1" in
+    pre)
+        if n=$(snapper -c root create -t pre -c number -p -d "dnf transaction" 2>/dev/null); then
+            echo "tmp.snapper_pre=$n"
+        else
+            echo "log.WARNING=snapper: no se pudo crear el snapshot pre"
+        fi
+        ;;
+    post)
+        if [[ "$2" =~ ^[0-9]+$ ]]; then
+            snapper -c root create -t post --pre-number "$2" -c number -d "dnf transaction" \
+                || echo "log.WARNING=snapper: no se pudo crear el snapshot post"
+            echo "tmp.snapper_pre"
+        fi
+        ;;
+esac
+exit 0

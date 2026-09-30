@@ -1,0 +1,16 @@
+[user]
+	name = Marc
+	email = 242160178+Anim41r0nic@users.noreply.github.com
+[init]
+	defaultBranch = main
+[pull]
+	rebase = false
+[core]
+	editor = nano
+	autocrlf = input
+[color]
+	ui = auto
+[fetch]
+	prune = true
+[diff]
+	colorMoved = zebra

@@ -1,0 +1,1 @@
+['org.gnome.Nautilus.desktop', 'com.brave.Browser.desktop', 'org.gnome.Ptyxis.desktop', 'com.microsoft.VSCode.desktop', 'pycharm-community.desktop', 'codeblocks.desktop', 'org.gnome.TextEditor.desktop', 'org.gnome.Settings.desktop']

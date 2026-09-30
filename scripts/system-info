@@ -1,0 +1,27 @@
+#!/bin/bash
+# Resumen rápido del estado del sistema (solo lectura).
+line() { printf '\n\e[1;34m== %s\e[0m\n' "$1"; }
+
+line "Sistema"
+grep PRETTY_NAME /etc/os-release | cut -d'"' -f2
+echo "Kernel: $(uname -r)   Sesión: ${XDG_SESSION_TYPE:-?}   Uptime: $(uptime -p)"
+
+line "Seguridad"
+echo "SELinux: $(getenforce)   Firewall: $(systemctl is-active firewalld)   Secure Boot: $(mokutil --sb-state 2>/dev/null | awk '{print $2}')"
+
+line "Memoria"
+free -h
+zramctl
+
+line "Disco"
+df -h / /home /boot /boot/efi | uniq
+echo "Snapshots root: $(snapper -c root list 2>/dev/null | tail -n +4 | wc -l)   home: $(snapper -c home list 2>/dev/null | tail -n +4 | wc -l)"
+
+line "Energía y temperatura"
+echo "Perfil: $(tuned-adm active | awk -F': ' '{print $2}')"
+upower -i "$(upower -e | grep BAT | head -1)" | grep -E 'state|percentage|capacity:'
+sensors 2>/dev/null | grep -E '^(Package|Core 0)' || true
+
+line "Servicios fallidos"
+systemctl --failed --no-legend || true
+systemctl --user --failed --no-legend || true

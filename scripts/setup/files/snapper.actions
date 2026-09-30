@@ -1,0 +1,5 @@
+# Snapshots automáticos de Snapper antes/después de cada transacción dnf.
+# Instalado en /etc/dnf/libdnf5-plugins/actions.d/snapper.actions
+# Formato: callback:package_filter:direction:options:command (man libdnf5-actions)
+pre_transaction:::enabled=host-only:/usr/local/sbin/dnf-snapper-hook pre
+post_transaction:::enabled=host-only:/usr/local/sbin/dnf-snapper-hook post ${tmp.snapper_pre}

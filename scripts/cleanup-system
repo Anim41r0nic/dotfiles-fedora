@@ -1,0 +1,25 @@
+#!/bin/bash
+# Limpieza segura. Muestra lo que haría y pide confirmación para cada paso.
+# No toca archivos personales ni snapshots manuales.
+set -uo pipefail
+ask() { read -rp "$1 [s/N] " r; [[ $r =~ ^[sS]$ ]]; }
+
+echo "==> Paquetes que ya nadie necesita (dnf autoremove):"
+dnf repoquery --unneeded -q 2>/dev/null || true
+ask "¿Eliminarlos?" && sudo dnf autoremove
+
+echo; echo "==> Caché de dnf: $(sudo du -sh /var/cache/libdnf5 2>/dev/null | cut -f1)"
+ask "¿Limpiar la caché de dnf?" && sudo dnf clean all
+
+echo; echo "==> Runtimes Flatpak sin usar:"
+ask "¿Eliminarlos?" && flatpak uninstall --unused
+
+echo; echo "==> Journal: $(journalctl --disk-usage | grep -o '[0-9.]*[KMG]')"
+ask "¿Reducir el journal a 2 semanas?" && sudo journalctl --vacuum-time=2weeks
+
+echo; echo "==> Imágenes de contenedores sin usar (podman):"
+podman image ls --filter dangling=true
+ask "¿Eliminar imágenes huérfanas?" && podman image prune
+
+echo; echo "Snapper limpia sus snapshots solo (timers snapper-cleanup)."
+echo "Espacio actual:"; df -h / | tail -1

@@ -1,0 +1,29 @@
+#!/bin/bash
+# Actualiza Fedora de forma controlada: snapshot "importante" + dnf + Flatpak + firmware.
+# dnf ya crea snapshots pre/post automáticos; el manual queda marcado como
+# importante para que la limpieza lo conserve más tiempo.
+set -euo pipefail
+
+echo "==> Buscando actualizaciones..."
+if dnf check-upgrade -q --refresh >/dev/null; then
+    echo "Paquetes del sistema: al día."
+else
+    dnf check-upgrade -q || true
+    read -rp "¿Instalar estas actualizaciones? [s/N] " r
+    if [[ $r =~ ^[sS]$ ]]; then
+        sudo snapper -c root create -c number -u important=yes -d "Antes de update-system"
+        sudo dnf upgrade -y
+    fi
+fi
+
+echo; echo "==> Flatpak"
+flatpak update -y
+
+echo; echo "==> Firmware (fwupd)"
+fwupdmgr refresh --force >/dev/null 2>&1 || true
+fwupdmgr get-updates || true
+echo "Para instalar firmware: fwupdmgr update  (enchufado a la corriente)"
+
+if [[ -f /run/reboot-required ]] || [[ "$(rpm -q --last kernel | head -1 | awk '{print $1}' | sed 's/kernel-//')" != "$(uname -r)" ]]; then
+    echo; echo "*** Hay un kernel nuevo: reinicia cuando puedas. ***"
+fi
